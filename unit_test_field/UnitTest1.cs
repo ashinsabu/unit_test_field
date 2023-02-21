@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Support;
 using System.Threading;
 
 namespace unit_test_field
@@ -22,26 +23,30 @@ namespace unit_test_field
             By maleRadioButton = By.Id("male");
             By femaleRadioButton = By.Id("female");
             By transgenderRadioButton = By.Id("transgender");
-
+            By fileUploadField = By.XPath("//input[@type='file']");
 
             var chromeOptions = new ChromeOptions();
-            chromeOptions.AddArguments("headless");
+            //chromeOptions.AddArguments("headless");
+
+            
 
             IWebDriver webDriver = new ChromeDriver(chromeOptions);
             webDriver.Manage().Window.Maximize();
             webDriver.Navigate().GoToUrl("https://app.cloudqa.io/home/AutomationPracticeForm");
+
+            IJavaScriptExecutor jse = (IJavaScriptExecutor)webDriver;
 
             var firstNameFieldCheck = webDriver.FindElement(firstNameField);
             var lastNameFieldCheck = webDriver.FindElement(lastNameField);
             var mobileNumberFieldCheck = webDriver.FindElement(mobileNumberField);
             var emailFieldCheck = webDriver.FindElement(emailField);
 
-            // First Name Field Test
+            // Field 1 Test: First Name Field Test
             webDriver.FindElement(firstNameField).SendKeys("Ashin Sabu");
             Assert.IsTrue(firstNameFieldCheck.GetAttribute("value").Equals("Ashin Sabu"));
             Thread.Sleep(1000);
 
-            // Reset Button Test
+            // Field 2 Test: Reset Button Test
             webDriver.FindElement(resetButton).Click();
             Assert.IsTrue(
                 firstNameFieldCheck.GetAttribute("value").Equals("") 
@@ -51,7 +56,7 @@ namespace unit_test_field
             );
             Thread.Sleep(1000);
 
-            //Gender Radio Button Test
+            // Field 3 Test: Gender Radio Button Test
             var maleRadioButtonCheck = webDriver.FindElement(maleRadioButton);
             var femaleRadioButtonCheck = webDriver.FindElement(femaleRadioButton);
             var transgenderRadioButtonCheck = webDriver.FindElement(transgenderRadioButton);
@@ -67,6 +72,17 @@ namespace unit_test_field
             webDriver.FindElement(transgenderRadioButton).Click();
             Assert.IsTrue((femaleRadioButtonCheck.Selected == false && maleRadioButtonCheck.Selected == false));
             Thread.Sleep(1000);
+
+            // Field 4: Upload file test
+            // IMPORTANT: Change the file path if you wish to run the test locally
+            webDriver.FindElement(fileUploadField).SendKeys("C:/Users/Ashin/Desktop/ashin.jpg");
+            Assert.IsTrue((bool)jse.ExecuteScript("" +
+                "let fileField = document.querySelectorAll(`input[type='file']`); " +
+                "if(fileField[0].files.length == 0) " +
+                "return false; " +
+                "else " +
+                "return true;"));
+
 
             webDriver.Quit();
 
