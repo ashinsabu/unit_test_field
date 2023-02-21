@@ -26,6 +26,9 @@ namespace unit_test_field
             By fileUploadField = By.XPath("//input[@type='file']");
 
             var chromeOptions = new ChromeOptions();
+
+            // UNCOMMENT FOLLOWING LINE IF YOU WISH TO RUN TESTS IN HEADLESS MODE
+
             //chromeOptions.AddArguments("headless");
 
             
