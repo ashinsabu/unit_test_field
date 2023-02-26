@@ -41,6 +41,7 @@ namespace unit_test_field
             Assert.IsTrue(textFieldsCheck[0].GetAttribute("value").Equals("Ashin Sabu"));
             Thread.Sleep(1000);
 
+
             // Field 2 Test: Reset Button Test
             webDriver.FindElement(resetButton).Click();
             Assert.IsTrue(
@@ -48,7 +49,7 @@ namespace unit_test_field
                 textFieldsCheck[1].GetAttribute("value").Equals("") &&
                 textFieldsCheck[2].GetAttribute("value").Equals("") &&
                 textFieldsCheck[3].GetAttribute("value").Equals("") &&
-                textFieldsCheck[4].GetAttribute("value").Equals("") 
+                textFieldsCheck[4].GetAttribute("value").Equals("")
             );
             Thread.Sleep(1000);
 
@@ -77,6 +78,13 @@ namespace unit_test_field
                 "else " +
                 "return true;"));
             Thread.Sleep(1000);
+
+            // TEST assuming the position of elements may change.
+
+            var firstNameLabel = webDriver.FindElement(By.XPath("//*[text()='First Name']"));
+            var firstNameDiv = firstNameLabel.FindElement(By.XPath("parent::*"));
+            var firstNameInput = firstNameDiv.FindElement(By.XPath("//input[@type = 'text']"));
+            firstNameInput.SendKeys("Ashin Sabu");
 
             webDriver.Quit();
 
